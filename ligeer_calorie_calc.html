@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة السعرات LIGEER</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #FFD700; /* أصفر */
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #FFD700;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .cta {
+            margin-top: 30px;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .cta a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #FFD700;
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+        table, th, td {
+            border: 1px solid #FFD700;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏋️‍♂️ حاسبة السعرات LIGEER</h1>
+    <p>احسب احتياجاتك اليومية من السعرات مع LIGEER!</p>
+
+    <form id="calorieForm">
+        <label for="gender">الجنس:</label>
+        <select id="gender" required>
+            <option value="male">ذكر</option>
+            <option value="female">أنثى</option>
+        </select>
+
+        <label for="age">العمر (بالسنوات):</label>
+        <input type="number" id="age" required>
+
+        <label for="height">الطول (سم):</label>
+        <input type="number" id="height" required>
+
+        <label for="weight">الوزن (كجم):</label>
+        <input type="number" id="weight" required>
+
+        <label for="activity">مستوى النشاط:</label>
+        <select id="activity" required>
+            <option value="1.2">خامل جداً</option>
+            <option value="1.375">نشاط خفيف</option>
+            <option value="1.55">نشاط متوسط</option>
+            <option value="1.725">نشاط عالي</option>
+            <option value="1.9">رياضي محترف</option>
+        </select>
+
+        <button type="button" onclick="calculateCalories()">احسب السعرات</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <div id="mealPlan"></div>
+
+    <div class="cta">
+        <h2>💪 حقق أهدافك مع LIGEER!</h2>
+        <a href="#">تيشيرتات رياضية</a>
+        <a href="#"> شورتات</a>
+        <a href="#"> اكسسوارات</a>
+    </div>
+
+    <script>
+        function calculateCalories() {
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+
+            let bmr;
+
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            const tdee = bmr * activity;
+
+            const maintenance = Math.round(tdee);
+            const loseWeight = Math.round(tdee - 500);
+            const gainWeight = Math.round(tdee + 500);
+
+            document.getElementById('result').innerHTML = `
+                🏋️‍♂️ <strong>السعرات المطلوبة يومياً:</strong> ${maintenance} سعرة حرارية<br>
+                💨 <strong>لخسارة الوزن:</strong> ${loseWeight} سعرة حرارية تقريباً<br>
+                🏊 <strong>لزيادة الوزن:</strong> ${gainWeight} سعرة حرارية تقريباً
+            `;
+
+            document.getElementById('mealPlan').innerHTML = `
+                <h2>🍽️ جدول وجبات مقترح</h2>
+                <table>
+                    <tr>
+                        <th>الهدف</th>
+                        <th>وجبة الفطور</th>
+                        <th>وجبة الغداء</th>
+                        <th>وجبة العشاء</th>
+                        <th>سناك</th>
+                    </tr>
+                    <tr>
+                        <td>خسارة وزن</td>
+                        <td>بيض + شوفان + قهوة سوداء</td>
+                        <td>صدر دجاج + خضار مشوية + رز بني</td>
+                        <td>سلطة تونة + خضار + زيت زيتون</td>
+                        <td>حفنة مكسرات</td>
+                    </tr>
+                    <tr>
+                        <td>الحفاظ على الوزن</td>
+                        <td>بيض + توست أسمر + أفوكادو</td>
+                        <td>لحم مفروم قليل الدهن + بطاطس مشوية + خضار</td>
+                        <td>سالمون + كينوا + خضار مشوية</td>
+                        <td>زبادي بروتين</td>
+                    </tr>
+                    <tr>
+                        <td>زيادة الوزن</td>
+                        <td>بان كيك شوفان + زبدة فول سوداني + عسل</td>
+                        <td>دجاج + مكرونة كاملة + زيت زيتون + خضار</td>
+                        <td>ستيك لحم + رز + خضار + جبن</td>
+                        <td>تمر + زبدة فول سوداني</td>
+                    </tr>
+                </table>
+            `;
+        }
+    </script>
+</body>
+</html>
