@@ -2,173 +2,271 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>🏋️‍♂️ حاسبة السعرات LIGEER</title>
+    <title>مركز الصحة واللياقة - LIGEER</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000000;
-            color: #FFFFFF;
-            text-align: center;
+            background-color: #ffffff;
+            color: #000000;
             padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            border: 2px solid #40E0D0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #E30613;
-            margin-top: 40px;
+            text-align: center;
+            color: #FDB813;
+            margin-bottom: 20px;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .nav-buttons button {
+            background-color: #FDB813;
+            color: #000000;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            flex: 1 1 30%;
+        }
+        .nav-buttons button:hover {
+            background-color: #f0b400;
         }
         label {
             display: block;
-            margin: 10px 0 5px;
-            font-size: 1.2em;
+            margin-top: 10px;
         }
-        input, select {
-            padding: 10px;
-            width: 80%;
-            margin-bottom: 15px;
-            border-radius: 5px;
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button.calc-btn {
+            background-color: #FDB813;
+            color: #000000;
             border: none;
-        }
-        button {
-            padding: 12px 25px;
-            background-color: #E30613;
-            color: #FFFFFF;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .result {
+            padding: 10px 20px;
             margin-top: 20px;
-            font-size: 1.3em;
-            color: #FFD700;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button.calc-btn:hover {
+            background-color: #f0b400;
+        }
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .advice-list {
+            text-align: right;
+            margin-top: 15px;
+        }
+        .advice-list li {
+            margin-bottom: 5px;
+            line-height: 1.6;
         }
         .bmi-bar {
-            margin-top: 20px;
-            height: 20px;
-            background: linear-gradient(to right, red 15%, orange 25%, yellow 35%, green 50%, blue 75%);
             position: relative;
-            border-radius: 10px;
+            height: 30px;
+            background: linear-gradient(to right,
+                #2196F3 18.5%,
+                #4CAF50 24.9%,
+                #FFEB3B 29.9%,
+                #FFC107 34.9%,
+                #FF5722 39.9%,
+                #F44336 100%
+            );
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 5px;
         }
         .bmi-indicator {
             position: absolute;
-            top: -5px;
-            width: 10px;
-            height: 30px;
-            background-color: #FFFFFF;
-            border: 2px solid #E30613;
-            border-radius: 3px;
+            top: -20px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 15px solid #000000;
         }
-        .footer {
-            margin-top: 30px;
-        }
-        .footer a {
-            display: inline-block;
-            padding: 12px 25px;
-            background-color: #E30613;
-            color: #FFFFFF;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
+        .bmi-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <h1>🏋️‍♂️ حاسبة السعرات LIGEER</h1>
-    <p>احسب احتياجاتك اليومية من السعرات مع LIGEER!</p>
+    <h1>مركز الصحة واللياقة - LIGEER</h1>
 
-    <form id="calorieForm">
-        <label for="gender">الجنس:</label>
-        <select id="gender" required>
-            <option value="male">ذكر</option>
-            <option value="female">أنثى</option>
-        </select>
-
-        <label for="age">العمر (بالسنوات):</label>
-        <input type="number" id="age" required>
-
-        <label for="height">الطول (سم):</label>
-        <input type="number" id="height" required>
-
-        <label for="weight">الوزن (كجم):</label>
-        <input type="number" id="weight" required>
-
-        <label for="activity">مستوى النشاط:</label>
-        <select id="activity" required>
-            <option value="1.2">خامل جداً</option>
-            <option value="1.375">نشاط خفيف</option>
-            <option value="1.55">نشاط متوسط</option>
-            <option value="1.725">نشاط عالي</option>
-            <option value="1.9">رياضي محترف</option>
-        </select>
-
-        <button type="button" onclick="calculateCalories()">احسب</button>
-    </form>
-
-    <div class="result" id="result"></div>
-    <div class="bmi-bar" id="bmiBar">
-        <div class="bmi-indicator" id="bmiIndicator" style="left: 0%;"></div>
+    <div class="nav-buttons">
+        <button onclick="showSection('calories')">🔢 حاسبة السعرات</button>
+        <button onclick="showSection('water')">💧 حاسبة شرب الماء</button>
+        <button onclick="showSection('workout')">🏋️‍♂️ مولد جدول التمارين</button>
     </div>
 
-    <div class="footer" style="margin-top: 40px; color: #FFFFFF; font-size: 1em;">
-        💪 حقق أهدافك مع LIGEER — ابدأ اليوم رحلتك مع مجموعتنا الرياضية المميزة!
+    <!-- حاسبة السعرات -->
+    <div id="calories-section">
+        <form id="calorieForm">
+            <label for="age">العمر:</label>
+            <input type="number" id="age" value="25" min="15" max="80">
+
+            <label>الجنس:</label>
+            <div class="gender-options">
+                <input type="radio" name="gender" value="male" checked> ذكر
+                <input type="radio" name="gender" value="female"> أنثى
+            </div>
+
+            <label for="height">الطول (سم):</label>
+            <input type="number" id="height" value="180">
+
+            <label for="weight">الوزن (كجم):</label>
+            <input type="number" id="weight" value="65">
+
+            <label for="activity">مستوى النشاط:</label>
+            <select id="activity">
+                <option value="1.2">خامل (بدون تمارين)</option>
+                <option value="1.375">نشاط خفيف (1-3 أيام تمرين بالأسبوع)</option>
+                <option value="1.55" selected>نشاط متوسط (4-5 أيام تمرين بالأسبوع)</option>
+                <option value="1.725">نشاط مكثف (6-7 أيام تمرين بالأسبوع)</option>
+                <option value="1.9">نشاط عالي جداً (تمرين مرتين يومياً)</option>
+            </select>
+
+            <button type="button" class="calc-btn" onclick="calculateCalories()">احسب</button>
+        </form>
+        <div id="result-calories"></div>
     </div>
 
-    <div class="footer">
-        <a href="https://ligeer-lr.com/ar" target="_blank">زيارة موقع LIGEER</a>
+    <!-- حاسبة شرب الماء -->
+    <div id="water-section" style="display:none;">
+        <form id="waterForm">
+            <label for="water-weight">وزنك (كجم):</label>
+            <input type="number" id="water-weight" value="70" min="30" max="200">
+            <button type="button" class="calc-btn" onclick="calculateWater()">احسب</button>
+        </form>
+        <div id="result-water"></div>
+    </div>
+
+    <!-- مولد جدول التمارين -->
+    <div id="workout-section" style="display:none;">
+        <form id="workoutForm">
+            <label for="goal">هدفك:</label>
+            <select id="goal">
+                <option value="loss">إنقاص الوزن</option>
+                <option value="gain">بناء العضلات</option>
+                <option value="fitness">تحسين اللياقة</option>
+            </select>
+
+            <label for="level">مستواك:</label>
+            <select id="level">
+                <option value="beginner">مبتدئ</option>
+                <option value="intermediate">متوسط</option>
+                <option value="advanced">متقدم</option>
+            </select>
+
+            <button type="button" class="calc-btn" onclick="generateWorkout()">أظهر الجدول</button>
+        </form>
+        <div id="result-workout"></div>
     </div>
 
     <script>
-        function calculateCalories() {
-            const gender = document.getElementById('gender').value;
-            const age = parseInt(document.getElementById('age').value);
-            const height = parseInt(document.getElementById('height').value);
-            const weight = parseInt(document.getElementById('weight').value);
-            const activity = parseFloat(document.getElementById('activity').value);
+        function showSection(section) {
+            document.getElementById('calories-section').style.display = 'none';
+            document.getElementById('water-section').style.display = 'none';
+            document.getElementById('workout-section').style.display = 'none';
+            document.getElementById(section + '-section').style.display = 'block';
+        }
 
-            // BMR
-            let bmr;
-            if (gender === 'male') {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+        function calculateCalories() {
+            var age = document.getElementById('age').value;
+            var height = document.getElementById('height').value;
+            var weight = document.getElementById('weight').value;
+            var gender = document.querySelector('input[name="gender"]:checked').value;
+            var activity = document.getElementById('activity').value;
+
+            var heightM = height / 100;
+            var bmi = weight / (heightM * heightM);
+            var idealWeight = 22 * (heightM * heightM);
+            var bmr = (gender == 'male') ? (10 * weight + 6.25 * height - 5 * age + 5) : (10 * weight + 6.25 * height - 5 * age - 161);
+            var calories = bmr * activity;
+            var idealBmr = (gender == 'male') ? (10 * idealWeight + 6.25 * height - 5 * age + 5) : (10 * idealWeight + 6.25 * height - 5 * age - 161);
+            var idealCalories = idealBmr * activity;
+            var bmiPercent = Math.min((bmi / 41.8) * 100, 100);
+
+            document.getElementById('result-calories').innerHTML = `
+                <div class="card">السعرات الحرارية الحالية: <strong>${Math.round(calories)} سعر حراري</strong></div>
+                <div class="card">الوزن المثالي: <strong>${idealWeight.toFixed(2)} كجم</strong></div>
+                <div class="card">السعرات للوصول للوزن المثالي: <strong>${idealCalories.toFixed(2)} سعر حراري</strong></div>
+                <div class="card">
+                    <div class="bmi-bar">
+                        <div class="bmi-indicator" style="right: calc(${bmiPercent}% - 10px);"></div>
+                    </div>
+                    <div class="bmi-scale">
+                        <span>18.5</span>
+                        <span>24.9</span>
+                        <span>29.9</span>
+                        <span>34.9</span>
+                        <span>39.9</span>
+                        <span>41.8</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateWater() {
+            var weight = document.getElementById('water-weight').value;
+            var waterMl = weight * 35;
+            var waterL = waterMl / 1000;
+            document.getElementById('result-water').innerHTML = `
+                <div class="card">
+                    تحتاج إلى شرب تقريباً: <strong>${waterL.toFixed(2)} لتر</strong> ماء يومياً.
+                </div>
+            `;
+        }
+
+        function generateWorkout() {
+            var goal = document.getElementById('goal').value;
+            var level = document.getElementById('level').value;
+            var plan = "";
+
+            if (goal == "loss") {
+                if (level == "beginner") plan = "3 أيام كارديو + 2 أيام تمارين مقاومة.";
+                else if (level == "intermediate") plan = "4 أيام كارديو + 3 أيام مقاومة.";
+                else plan = "5 أيام كارديو + 3 أيام مقاومة + HIIT.";
+            } else if (goal == "gain") {
+                if (level == "beginner") plan = "3 أيام تمارين مقاومة لكامل الجسم.";
+                else if (level == "intermediate") plan = "4 أيام تقسيم عضلي (صدر-ظهر-أرجل-أكتاف).";
+                else plan = "5-6 أيام مقاومة + يوم كارديو خفيف.";
             } else {
-                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+                if (level == "beginner") plan = "3 أيام كارديو + 2 أيام مقاومة خفيفة.";
+                else if (level == "intermediate") plan = "4 أيام كارديو + 3 أيام مقاومة.";
+                else plan = "5 أيام كارديو + 3 أيام مقاومة + مرونة.";
             }
 
-            const tdee = bmr * activity;
-            const maintenance = Math.round(tdee);
-
-            // BMI
-            const bmi = weight / Math.pow(height / 100, 2);
-            let bmiCategory = '';
-            if (bmi < 18.5) bmiCategory = 'نقص وزن';
-            else if (bmi < 24.9) bmiCategory = 'وزن طبيعي';
-            else if (bmi < 29.9) bmiCategory = 'زيادة وزن';
-            else if (bmi < 34.9) bmiCategory = 'سمنة درجة 1';
-            else if (bmi < 39.9) bmiCategory = 'سمنة درجة 2';
-            else bmiCategory = 'سمنة مفرطة';
-
-            // الوزن المثالي (تقريبي)
-            const idealWeight = Math.round(22 * Math.pow(height / 100, 2));
-
-            // السعرات للوصول للوزن المثالي
-            const idealBmr = (gender === 'male') ?
-                (10 * idealWeight) + (6.25 * height) - (5 * age) + 5 :
-                (10 * idealWeight) + (6.25 * height) - (5 * age) - 161;
-
-            const idealTdee = Math.round(idealBmr * activity);
-
-            document.getElementById('result').innerHTML = `
-                🧮 <strong>BMI:</strong> ${bmi.toFixed(1)} (${bmiCategory})<br>
-                🎯 <strong>الوزن المثالي:</strong> ${idealWeight} كجم<br>
-                🔥 <strong>السعرات الحالية:</strong> ${maintenance} سعرة حرارية/يوم<br>
-                🏆 <strong>السعرات المطلوبة للوصول للوزن المثالي:</strong> ${idealTdee} سعرة حرارية/يوم
+            document.getElementById('result-workout').innerHTML = `
+                <div class="card">
+                    <strong>خطة التمارين:</strong>
+                    <div style="margin-top: 10px;">${plan}</div>
+                </div>
             `;
-
-            // تحديث مؤشر الـ BMI Bar
-            let bmiPercent = Math.min(100, Math.max(0, ((bmi / 40) * 100)));
-            document.getElementById('bmiIndicator').style.left = bmiPercent + '%';
         }
     </script>
 </body>
