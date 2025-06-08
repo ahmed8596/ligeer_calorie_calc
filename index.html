@@ -1,23 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة السعرات LIGEER</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>🏋️‍♂️ حاسبة السعرات LIGEER</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000;
-            color: #fff;
+            background-color: #000000;
+            color: #FFFFFF;
             text-align: center;
             padding: 20px;
         }
         h1 {
-            color: #FFD700;
+            color: #E30613;
+            margin-top: 40px;
         }
         label {
             display: block;
             margin: 10px 0 5px;
+            font-size: 1.2em;
         }
         input, select {
             padding: 10px;
@@ -28,45 +31,47 @@
         }
         button {
             padding: 12px 25px;
-            background-color: #FFD700;
-            color: #000;
+            background-color: #E30613;
+            color: #FFFFFF;
             font-weight: bold;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-size: 1em;
         }
         .result {
             margin-top: 20px;
-            font-size: 1.2em;
+            font-size: 1.3em;
+            color: #FFD700;
         }
-        .cta {
-            margin-top: 30px;
-            background-color: #1a1a1a;
-            padding: 20px;
+        .bmi-bar {
+            margin-top: 20px;
+            height: 20px;
+            background: linear-gradient(to right, red 15%, orange 25%, yellow 35%, green 50%, blue 75%);
+            position: relative;
             border-radius: 10px;
         }
-        .cta a {
+        .bmi-indicator {
+            position: absolute;
+            top: -5px;
+            width: 10px;
+            height: 30px;
+            background-color: #FFFFFF;
+            border: 2px solid #E30613;
+            border-radius: 3px;
+        }
+        .footer {
+            margin-top: 30px;
+        }
+        .footer a {
             display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #FFD700;
-            color: #000;
+            padding: 12px 25px;
+            background-color: #E30613;
+            color: #FFFFFF;
             text-decoration: none;
             border-radius: 8px;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background-color: #1a1a1a;
-            color: #fff;
-        }
-        table, th, td {
-            border: 1px solid #FFD700;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -99,15 +104,19 @@
             <option value="1.9">رياضي محترف</option>
         </select>
 
-        <button type="button" onclick="calculateCalories()">احسب السعرات</button>
+        <button type="button" onclick="calculateCalories()">احسب</button>
     </form>
 
     <div class="result" id="result"></div>
+    <div class="bmi-bar" id="bmiBar">
+        <div class="bmi-indicator" id="bmiIndicator" style="left: 0%;"></div>
+    </div>
 
-    <div id="mealPlan"></div>
+    <div class="footer" style="margin-top: 40px; color: #FFFFFF; font-size: 1em;">
+        💪 حقق أهدافك مع LIGEER — ابدأ اليوم رحلتك مع مجموعتنا الرياضية المميزة!
+    </div>
 
-    <div class="cta">
-        <h2>💪 حقق أهدافك مع LIGEER!</h2>
+    <div class="footer">
         <a href="https://ligeer-lr.com/ar" target="_blank">زيارة موقع LIGEER</a>
     </div>
 
@@ -119,8 +128,8 @@
             const weight = parseInt(document.getElementById('weight').value);
             const activity = parseFloat(document.getElementById('activity').value);
 
+            // BMR
             let bmr;
-
             if (gender === 'male') {
                 bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
             } else {
@@ -128,50 +137,38 @@
             }
 
             const tdee = bmr * activity;
-
             const maintenance = Math.round(tdee);
-            const loseWeight = Math.round(tdee - 500);
-            const gainWeight = Math.round(tdee + 500);
+
+            // BMI
+            const bmi = weight / Math.pow(height / 100, 2);
+            let bmiCategory = '';
+            if (bmi < 18.5) bmiCategory = 'نقص وزن';
+            else if (bmi < 24.9) bmiCategory = 'وزن طبيعي';
+            else if (bmi < 29.9) bmiCategory = 'زيادة وزن';
+            else if (bmi < 34.9) bmiCategory = 'سمنة درجة 1';
+            else if (bmi < 39.9) bmiCategory = 'سمنة درجة 2';
+            else bmiCategory = 'سمنة مفرطة';
+
+            // الوزن المثالي (تقريبي)
+            const idealWeight = Math.round(22 * Math.pow(height / 100, 2));
+
+            // السعرات للوصول للوزن المثالي
+            const idealBmr = (gender === 'male') ?
+                (10 * idealWeight) + (6.25 * height) - (5 * age) + 5 :
+                (10 * idealWeight) + (6.25 * height) - (5 * age) - 161;
+
+            const idealTdee = Math.round(idealBmr * activity);
 
             document.getElementById('result').innerHTML = `
-                🏋️‍♂️ <strong>السعرات المطلوبة يومياً:</strong> ${maintenance} سعرة حرارية<br>
-                💨 <strong>لخسارة الوزن:</strong> ${loseWeight} سعرة حرارية تقريباً<br>
-                🏊 <strong>لزيادة الوزن:</strong> ${gainWeight} سعرة حرارية تقريباً
+                🧮 <strong>BMI:</strong> ${bmi.toFixed(1)} (${bmiCategory})<br>
+                🎯 <strong>الوزن المثالي:</strong> ${idealWeight} كجم<br>
+                🔥 <strong>السعرات الحالية:</strong> ${maintenance} سعرة حرارية/يوم<br>
+                🏆 <strong>السعرات المطلوبة للوصول للوزن المثالي:</strong> ${idealTdee} سعرة حرارية/يوم
             `;
 
-            document.getElementById('mealPlan').innerHTML = `
-                <h2>🍽️ جدول وجبات مقترح</h2>
-                <table>
-                    <tr>
-                        <th>الهدف</th>
-                        <th>وجبة الفطور</th>
-                        <th>وجبة الغداء</th>
-                        <th>وجبة العشاء</th>
-                        <th>سناك</th>
-                    </tr>
-                    <tr>
-                        <td>خسارة وزن</td>
-                        <td>بيض + شوفان + قهوة سوداء</td>
-                        <td>صدر دجاج + خضار مشوية + رز بني</td>
-                        <td>سلطة تونة + خضار + زيت زيتون</td>
-                        <td>حفنة مكسرات</td>
-                    </tr>
-                    <tr>
-                        <td>الحفاظ على الوزن</td>
-                        <td>بيض + توست أسمر + أفوكادو</td>
-                        <td>لحم مفروم قليل الدهن + بطاطس مشوية + خضار</td>
-                        <td>سالمون + كينوا + خضار مشوية</td>
-                        <td>زبادي بروتين</td>
-                    </tr>
-                    <tr>
-                        <td>زيادة الوزن</td>
-                        <td>بان كيك شوفان + زبدة فول سوداني + عسل</td>
-                        <td>دجاج + مكرونة كاملة + زيت زيتون + خضار</td>
-                        <td>ستيك لحم + رز + خضار + جبن</td>
-                        <td>تمر + زبدة فول سوداني</td>
-                    </tr>
-                </table>
-            `;
+            // تحديث مؤشر الـ BMI Bar
+            let bmiPercent = Math.min(100, Math.max(0, ((bmi / 40) * 100)));
+            document.getElementById('bmiIndicator').style.left = bmiPercent + '%';
         }
     </script>
 </body>
